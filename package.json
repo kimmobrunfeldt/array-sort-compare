@@ -1,0 +1,47 @@
+{
+  "name": "array-sort-compare",
+  "version": "1.0.0",
+  "description": "Generic compare function for Array.prototype.sort()",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kimmobrunfeldt/array-sort-compare.git"
+  },
+  "keywords": [
+    "array",
+    "sort",
+    "compare",
+    "comparison",
+    "comparer",
+    "comparator",
+    "type",
+    "generic"
+  ],
+  "author": "Kimmo Brunfeldt",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kimmobrunfeldt/array-sort-compare/issues"
+  },
+  "homepage": "https://github.com/kimmobrunfeldt/array-sort-compare#readme",
+  "devDependencies": {
+    "eslint": "^5.13.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "mocha": "^5.2.0",
+    "np": "^4.0.2"
+  },
+  "dependencies": {
+    "lodash.findindex": "^4.6.0",
+    "lodash.includes": "^4.3.0",
+    "lodash.isarray": "^4.0.0",
+    "lodash.isboolean": "^3.0.3",
+    "lodash.isdate": "^4.0.1",
+    "lodash.isnull": "^3.0.0",
+    "lodash.isnumber": "^3.0.3",
+    "lodash.isplainobject": "^4.0.6",
+    "lodash.isstring": "^4.0.1",
+    "lodash.isundefined": "^3.0.1"
+  }
+}
