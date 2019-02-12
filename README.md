@@ -2,7 +2,7 @@
 
 > Generic type-aware compare function for `Array.prototype.sort()` and sortDeep.
 
-[![Build Status](https://travis-ci.org/kimmobrunfeldt/array-sort-compare.svg?branch=master)](https://travis-ci.org/kimmobrunfeldt/array-sort-compare) *Build status for master*
+[![Build Status](https://travis-ci.org/kimmobrunfeldt/array-sort-compare.svg?branch=master)](https://travis-ci.org/kimmobrunfeldt/array-sort-compare)
 
 [![NPM Badge](https://nodei.co/npm/array-sort-compare.png?downloads=true)](https://www.npmjs.com/package/array-sort-compare)
 
