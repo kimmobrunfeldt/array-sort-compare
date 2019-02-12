@@ -1,6 +1,6 @@
 {
   "name": "array-sort-compare",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Generic compare function for Array.prototype.sort()",
   "main": "src/index.js",
   "scripts": {
