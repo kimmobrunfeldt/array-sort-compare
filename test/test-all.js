@@ -415,8 +415,9 @@ describe('array-sort-compare', () => {
         [10, -12, 100, "a", "a", null],
         [10, -12, 101, "a", "a", null],
         { b: 1 },
-        { a: [true, false] },
         { c: 2 },
+        { a: [true, false] },
+
         new Date(2019, 0, 1),
         Infinity,
         -12,
@@ -424,8 +425,9 @@ describe('array-sort-compare', () => {
         [[["c"]]],
         [[["b"]]],
       ]
-      sortDeep(data, compare())
-      console.log('data', data)
+
+      data.sort(compare())
+
       assert.deepEqual(data, [
         // number
         -12,
@@ -441,20 +443,19 @@ describe('array-sort-compare', () => {
         // date
         new Date(2019, 0, 1),
 
-        [-12, 10, 100, "a", "a", null],
-        [-12, 10, 100, "a", "b", null],
-        [-12, 10, 101, "a", "a", null],
+        [10, -12, 100, "a", "a", null],
+        [10, -12, 100, "a", "b", null],
+        [10, -12, 101, "a", "a", null],
 
-        [false, true],
+        [true, false],
 
         [
-          new Date(2010, 0, 1),
           new Date(2013, 0, 1),
+          new Date(2010, 0, 1),
           new Date(2019, 0, 1),
           [
-            // sorted also inside
-            new Date(2010, 0, 1),
             new Date(2013, 0, 1),
+            new Date(2010, 0, 1),
             new Date(2019, 0, 1),
           ],
         ],
@@ -464,8 +465,8 @@ describe('array-sort-compare', () => {
 
         // object
         { b: 1 },
-        { a: [true, false] },
         { c: 2 },
+        { a: [true, false] },
 
         null,
         undefined,
