@@ -70,12 +70,12 @@ sortDeep(arr, compare({
 const isPlainObject = require('lodash.isplainobject')
 const { sortDeep, compare } = require('array-sort-compare')
 
-const arr = [["a", 10, 2], ["a", 2, 1]]
+const arr = [{ day: 'TUESDAY', value: 1}, { day: 'MONDAY', value: 0}]
 sortDeep(arr, compare({
   // Our new category of objects (type) is called 'weekday'
   // It's an object looking like this:
   // { day: 'MONDAY', value: 0 }
-  typeOrder: ['weekday', 'number', 'string', 'boolean', 'array', 'object', 'null', 'undefined']
+  typeOrder: ['weekday', 'number', 'string', 'boolean', 'array', 'object', 'null', 'undefined'],
   typeCheckers: {
     // the 'weekday' key needs to match the string in typeOrder
     weekday: obj => isPlainObject(obj) && obj.hasOwnProperty('day') && obj.hasOwnProperty('value')
