@@ -3,6 +3,7 @@
 > Generic type-aware compare function for `Array.prototype.sort()` and sortDeep.
 
 [![Build Status](https://travis-ci.org/kimmobrunfeldt/array-sort-compare.svg?branch=master)](https://travis-ci.org/kimmobrunfeldt/array-sort-compare) *Build status for master*
+
 [![NPM Badge](https://nodei.co/npm/array-sort-compare.png?downloads=true)](https://www.npmjs.com/package/array-sort-compare)
 
 JavaScript arrays are sorted using string comparison by default, because that's what the spec say.
