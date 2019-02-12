@@ -14,7 +14,7 @@ const _ = {
 }
 
 // Decides the order of different types
-const typeOrder = [
+const TYPE_ORDER = [
   'number',
   'string',
   'boolean',
@@ -25,7 +25,7 @@ const typeOrder = [
   'undefined',
 ]
 
-const typeCheckers = {
+const TYPE_CHECKERS = {
   number: _.isNumber,
   string: _.isString,
   boolean: _.isBoolean,
@@ -67,7 +67,7 @@ function arrayCompare(a, b, genericCompare) {
   return 0
 }
 
-const typeComparers = {
+const TYPE_COMPARERS = {
   number: numberCompare,
   string: stringCompare,
   boolean: numberCompare,
@@ -80,44 +80,18 @@ const typeComparers = {
   // Should objects be for example sorted by they key length?
 }
 
-function getTypeIndex(obj) {
-  const index = _.findIndex(typeOrder, (typeName) => {
-    const isTypeMatch = typeCheckers[typeName](obj)
+function getTypeIndex(obj, opts) {
+  const index = _.findIndex(opts.typeOrder, (typeName) => {
+    const isTypeMatch = opts.typeCheckers[typeName](obj)
     return isTypeMatch
   })
   // If type was not found, it should get the worst "score"
-  return index === -1 ? typeOrder.length : index
+  return index === -1 ? opts.typeOrder.length : index
 }
 
 // https://stackoverflow.com/questions/47334234/how-to-implement-array-prototype-sort-default-compare-function
 // http://www.ecma-international.org/ecma-262/6.0/#sec-sortcompare
-function createComparator(opts) {
-  function genericCompare(a, b) {
-    const aTypeIndex = getTypeIndex(a)
-    const bTypeIndex = getTypeIndex(b)
-    if (aTypeIndex !== bTypeIndex) {
-      return aTypeIndex - bTypeIndex
-    }
-
-    const typeName = typeOrder[aTypeIndex]
-    if (!typeComparers.hasOwnProperty(typeName)) {
-      return 0
-    }
-
-    const compare = typeComparers[typeName]
-    if (_.includes(opts.ignoreDirectionOfTypes, typeName)) {
-      return compare(a, b, genericCompare)
-    }
-
-    const aDir = opts.direction === 'asc' ? a : b
-    const bDir = opts.direction === 'asc' ? b : a
-    return compare(aDir, bDir, genericCompare)
-  }
-
-  return genericCompare
-}
-
-function main(mixedOpts) {
+function createComparator(mixedOpts) {
   let _opts
   if (!mixedOpts) {
     _opts = {}
@@ -129,25 +103,55 @@ function main(mixedOpts) {
 
   const opts = Object.assign({
     direction: 'asc',
-    typeOrder,
-    typeCheckers: Object.assign({}, typeCheckers, _opts.typeCheckers),
-    typeComparers: Object.assign({}, typeComparers, _opts.typeComparers),
+    typeOrder: TYPE_ORDER,
     ignoreDirectionOfTypes: ['array']
   }, _opts)
 
-  return createComparator(opts)
+  opts.typeCheckers = Object.assign({}, TYPE_CHECKERS, opts.typeCheckers)
+  opts.typeComparers = Object.assign({}, TYPE_COMPARERS, opts.typeComparers)
+
+  function genericCompare(a, b) {
+    const aTypeIndex = getTypeIndex(a, opts)
+    const bTypeIndex = getTypeIndex(b, opts)
+    if (aTypeIndex !== bTypeIndex) {
+      return aTypeIndex - bTypeIndex
+    }
+
+    const typeName = opts.typeOrder[aTypeIndex]
+    if (!opts.typeComparers.hasOwnProperty(typeName)) {
+      return 0
+    }
+
+    const compare = opts.typeComparers[typeName]
+    const result = compare(a, b, genericCompare)
+
+    const ignoreDirection = _.includes(opts.ignoreDirectionOfTypes, typeName)
+    if (!ignoreDirection && opts.direction === 'desc') {
+      return -result
+    }
+
+    return result
+  }
+
+  return genericCompare
 }
 
+// Depth-first, so that the inner arrays are sorted first and then moving "layer by layer"
+// up.
 function sortDeep(arr, compareFunc) {
-  arr.forEach((item) => {
-    if (_.isArray(item)) {
-      item.sort(compareFunc)
+  for (let i = 0; i < arr.length; ++i) {
+    if (_.isArray(arr[i])) {
+      sortDeep(arr[i], compareFunc)
     }
-  })
-  arr.sort(compareFunc)
+  }
+
+  return arr.sort(compareFunc)
 }
 
 module.exports = {
-  compare: main,
+  compare: createComparator,
   sortDeep,
+  TYPE_ORDER,
+  TYPE_CHECKERS,
+  TYPE_COMPARERS,
 }
