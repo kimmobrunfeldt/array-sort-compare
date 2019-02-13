@@ -6,7 +6,7 @@
 
 [![NPM Badge](https://nodei.co/npm/array-sort-compare.png?downloads=true)](https://www.npmjs.com/package/array-sort-compare)
 
-JavaScript arrays are sorted using string comparison by default, because that's what the spec say.
+JavaScript arrays are sorted using string comparison by default, because that's what the spec says.
 This is an issue when sorting an array which has mixed types.
 
 **Before**
