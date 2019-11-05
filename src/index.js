@@ -67,17 +67,43 @@ function arrayCompare(a, b, genericCompare) {
   return 0
 }
 
+function getObjectScore(obj1, obj2, genericCompare) {
+  let score = 0;
+  for (let key in obj1) {
+    if (obj1.hasOwnProperty(key)) {
+      const compareResult = genericCompare(obj1[key], obj2[key])
+      if (compareResult < 0) {
+        score -= 1
+      } else if (compareResult > 0) {
+        score += 1
+      }
+    }
+  }
+  return score
+}
+
+function objectCompare(a, b, genericCompare) {
+  let aScore = getObjectScore(a, b, genericCompare);
+  let bScore = getObjectScore(b, a, genericCompare);
+
+  if (aScore > bScore) {
+    return 1
+  } else if (aScore < bScore) {
+    return -1
+  }
+
+  return 0
+}
+
 const TYPE_COMPARERS = {
   number: numberCompare,
   string: stringCompare,
   boolean: numberCompare,
   date: dateCompare,
   array: arrayCompare,
-  // object, null and undefined are all using default comparison
+  object: objectCompare,
+  // null and undefined are all using default comparison
   // For example two nulls are compared equal
-  // This behavior might not be ideal for objects, but couldn't
-  // figure out any other criteria either.
-  // Should objects be for example sorted by they key length?
 }
 
 function getTypeIndex(obj, opts) {
