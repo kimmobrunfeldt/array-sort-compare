@@ -350,21 +350,54 @@ describe('array-sort-compare', () => {
     })
 
     describe('object', () => {
-      it('always considered equal', () => {
+      it('simple number sort', () => {
         const data = [{ a: 2 }, { a: 1 }]
         data.sort(compare())
-        assert.deepEqual(data, [{ a: 2 }, { a: 1 }])
+        assert.deepEqual(data, [{ a: 1 }, { a: 2 }])
+      })
 
+      it('simple string sort', () => {
+        const data = [{ a: 'a' }, { a: 'b' }]
+        data.sort(compare())
+        assert.deepEqual(data, [{ a: 'a' }, { a: 'b' }])
+      })
+
+      it('simple null sort', () => {
+        const data = [{ a: null, b: null }, { a: null }]
+        data.sort(compare())
+        assert.deepEqual(data, [{ a: null, b: null }, { a: null }])
+      })
+
+      it('different types', () => {
+        const data = [{ a: 1 }, { a: 'a' }]
+        data.sort(compare())
+        assert.deepEqual(data, [{ a: 1 }, { a: 'a' }])
+      })
+
+      it('simple date sort', () => {
+        // In this case we test that large number returned by date comparison function
+        // doesn't affect the score with the same number
+        const data = [{ a: new Date(2013, 0, 1), b: null }, { a: new Date(2014, 0, 1) }]
+        data.sort(compare())
+        assert.deepEqual(data, [{ a: new Date(2013, 0, 1), b: null }, { a: new Date(2014, 0, 1) }])
+      })
+
+      it('more complex', () => {
         const data2 = [{ a: 1, b: { c: 'test' } }, { a: 2 }, { a: 1, b: 2 }]
         data2.sort(compare())
-        assert.deepEqual(data2, [{ a: 1, b: { c: 'test' } }, { a: 2 }, { a: 1, b: 2 }])
+        assert.deepEqual(data2, [{ a: 1, b: 2 }, { a: 1, b: { c: 'test' } }, { a: 2 }])
+      })
+
+      it('more complex', () => {
+        const data2 = [{ a: 1, b: { c: { d: 2 } } }, { a: 1, b: { c: { d: 1 } } }]
+        data2.sort(compare())
+        assert.deepEqual(data2, [{ a: 1, b: { c: { d: 1 } } }, { a: 1, b: { c: { d: 2 } } }])
       })
 
       it('object properties are not sorted', () => {
-        // Object properties are not iterated at the current state of code.
-        const data = [{ a: [2, 1] }, { a: 1 }]
+        const data = [{ a: 1 }, { a: [2, 1] }]
         data.sort(compare())
-        assert.deepEqual(data, [{ a: [2, 1] }, { a: 1 }])
+        assert.deepEqual(data, [{ a: 1 }, { a: [2, 1] }])
       })
     })
 
@@ -416,8 +449,8 @@ describe('array-sort-compare', () => {
           [10, -12, 100, "a", "a", null],
           [10, -12, 101, "a", "a", null],
           { b: 1 },
-          { c: 2 },
-          { a: [true, false] },
+          { b: 2 },
+          { b: [true, false] },
 
           new Date(2019, 0, 1),
           Infinity,
@@ -466,8 +499,8 @@ describe('array-sort-compare', () => {
 
           // object
           { b: 1 },
-          { c: 2 },
-          { a: [true, false] },
+          { b: 2 },
+          { b: [true, false] },
 
           null,
           undefined,
@@ -525,9 +558,9 @@ describe('array-sort-compare', () => {
         [10, -12, 100, "a", "b", null],
         [10, -12, 100, "a", "a", null],
         [10, -12, 101, "a", "a", null],
+        { b: [true, false] },
+        { b: 2 },
         { b: 1 },
-        { c: 2 },
-        { a: [true, false] },
 
         new Date(2019, 0, 1),
         Infinity,
@@ -576,8 +609,8 @@ describe('array-sort-compare', () => {
 
         // object
         { b: 1 },
-        { c: 2 },
-        { a: [true, false] },
+        { b: 2 },
+        { b: [true, false] },
 
         null,
         undefined,
